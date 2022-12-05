@@ -1,0 +1,558 @@
+#include<iostream>
+#include<fstream>
+#include<iomanip>
+#include<vector>
+#include<string>
+using namespace std;
+
+///////////
+class Game{
+    public:
+    string name;
+    int level;
+    int health;
+    int superhealth;
+    int xp;
+    int life;
+    Game(){
+    name="Traver";
+    level=1;
+    health=100;
+    superhealth=0;
+    xp=0;
+    life=3;
+    }
+    Game(string n){
+    name=n;
+    level=1;
+    health=100;
+    superhealth=0;
+    xp=0;
+    life=3;
+    }
+    Game(string n,int l,int h,int s,int x,int f){
+    name=n;
+    level=l;
+    health=h;
+    superhealth=s;
+    xp=x;
+    life=f;
+    }
+    void output(){
+    cout<<"Report of player"<<endl;
+    cout<<"Charecter Name: "<<name<<endl;
+    cout<<"Game Level: "<<level<<endl;
+    cout<<"Health of Charecter: "<<health<<endl;
+    cout<<"Super Health of charecter: "<<superhealth<<endl;
+    cout<<"Game XP: "<<xp<<endl;
+    cout<<"Life points left: "<<life<<endl;
+    }
+    string getName(){
+        return name;
+    }
+    int getLevel(){
+        return level;
+    }
+    int getHealth(){
+        return health;
+    }
+    int getSuperhealth(){
+        return superhealth;
+    }
+    int getXp(){
+        return xp;
+    }
+    int getlife(){
+        return life;
+    }
+};
+/////////////
+
+/////////////
+class Titan: public Game{
+    public:
+    string power;
+    int strike, defend;
+
+    Titan(){
+    power="Kick";
+    strike=30;
+    defend=100;
+    }
+    Titan(string n,int l,int h,int s,int x,int f,string po,int st, int de):Game(n,l,h,s,x,f){
+    power=po;
+    strike=st;
+    defend=de;
+    }
+    void output(){
+    cout<<"TITAN"<<endl<<"Titan's Power: "<<power<<endl;
+    cout<<"Titan's Strike Force: "<<strike<<endl;
+    cout<<"Titan's Defend: "<<defend<<endl;
+    }
+};
+/////////////
+
+/////////////
+class Witch: public Game{
+    public:
+    string spell;
+    int potion;
+
+    Witch(){
+    spell = "Fire";
+    potion=25;
+    }
+    Witch(string n,int l,int h,int s,int x,int f,string sp, int ti):Game(n,l,h,s,x,f){
+    spell=sp;
+    potion=ti;
+    }
+    void output(){
+        cout<<"WITCH"<<endl<<"Witch's Spell: "<<spell<<endl;
+    cout<<"Witch's Potion: "<<potion<<endl;
+    }
+};
+/////////////
+
+/////////////
+class Spartan: public Game{
+    public:
+    string weapon;
+    int attack, powerup;
+
+    Spartan(){
+    weapon="Fireball";
+    attack=60;
+    powerup=20;
+    }
+    Spartan(string n,int l,int h,int s,int x,int f, string we, int at, int up):Game(n,l,h,s,x,f){
+    weapon=we;
+    attack=at;
+    powerup=up;
+    }
+    void output(){
+    cout<<"SPARTAN"<<endl<<"Spartan's Weapon: "<<weapon<<endl;
+    cout<<"Spartan's Attack: "<<attack<<endl;
+    cout<<"Spartan's Powerup: "<<powerup<<endl;
+    }
+};
+////////////
+
+/////////////
+///////////////////////////////
+int enmy(){
+    int m;
+    m=1+(rand()%100);
+    return m;
+            }
+int main(void){
+    Game Gam;
+    Titan ta1;
+    Witch wit1;
+    Spartan spa1;
+
+    string yourname, charname, n1;
+    char fer='Y';
+    int choice,cchoice,n2,n3;
+    int level,health,superhealth,xp,life;
+    int enemy;
+    ifstream fin;
+    ofstream fout;
+    cout<<" *********************Welcome to Time for War*************************** "<<endl;
+    cout<<"Please choose an option:"<<endl;
+    cout<<"1.Load a new Game"<<endl<<"2.Load saved game"<<endl<<"3.Quit Game"<<endl;
+    cin>>choice;
+    cin.ignore();
+    if(choice==1){                                     /// Load new game
+            cout<<"Enter your name without spaces in order to save game and resume game letter"<<endl;
+            getline(cin,yourname);
+            cout<<"Choose a charecter:"<<endl<<"1. Titan"<<endl<<"2. Spartan"<<endl<<"3. Witch"<<endl;
+            cin>>cchoice;
+            cin.ignore();
+            yourname=yourname+".txt";
+            fout.open(yourname);
+            cout<<"Enter the Name of character"<<endl;
+            getline(cin,charname);
+            Game Gam(charname);
+            Gam.Game::output();
+                    if(cchoice==1){
+                                cout<<"Enter power: ";
+                                getline(cin,n1);
+                                while(fer!='y' || fer!='Y'){ 
+                                cout<<"Enter Strike Force between 1 and 100: ";
+                                cin>>n2;
+                                cout<<"Enter Defense Force between 1 and 100: ";
+                                cin>>n3;
+                                Titan ta1(charname,1,100,0,0,3,n1,n2,n3);
+                                ta1.Titan::output();
+                                enemy=enmy();
+                                if(n2>enemy){
+                                    cout<<"Enemy power is:"<<enemy;
+                                    cout<<endl<<"********************You Win this round**************************"<<endl;
+                                    level=Gam.Game::getLevel()+1;
+                                    health=Gam.Game::getHealth();
+                                    superhealth=Gam.Game::getSuperhealth();
+                                    xp=Gam.Game::getXp()+15;
+                                    life=Gam.Game::getlife();
+                                    Game Gam(charname,level,health,superhealth,xp,life);
+                                    Gam.Game::output();
+                                            }
+                                else{
+                                    cout<<"Enemy power is:"<<enemy;
+                                    cout<<endl<<"***************************You Loose this round**********************************"<<endl;
+                                    level=Gam.Game::getLevel();
+                                    health=Gam.Game::getHealth()-1;
+                                    superhealth=Gam.Game::getSuperhealth();
+                                    if(Gam.Game::getXp()==0){
+                                        xp=Gam.Game::getXp();
+                                                        }
+                                    else{
+                                        xp=Gam.Game::getXp()-15;
+                                        }
+                                    if(Gam.Game::getlife()==0){
+                                        cout<<"You have lost all your chances";
+                                        fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                        return(0);
+                                                    }
+                                    else{
+                                        life=Gam.Game::getlife()-1;
+                                        }
+                                    Game Gam(charname,level,health,superhealth,xp,life);
+                                    Gam.Game::output();
+                                    }
+                                cout<<"Do you want to continue Game if yes enter 'Y' or 'y'"<<endl;
+                                cout<<"If you want to exit game enter 'e' or 'E'"<<endl;
+                                cin>>fer;
+                                if(fer=='e' || fer=='E'){
+                                    cout<<"Thankyou for playing. See you next time. Game Saved"<<endl;
+                                    fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                    return(0);
+                                                        }
+                                                            }
+                            }
+                        if(cchoice==2){
+                                cout<<"Enter Spell: ";
+                                getline(cin,n1);
+                                while(fer!='y' || fer!='Y'){
+                                cout<<"Enter Potion power between 1 and 100: ";
+                                cin>>n2;
+                                Witch wit1(charname,1,100,0,0,3,n1,n2);
+                                wit1.Witch::output();
+                                enemy=enmy();
+                                if(n2>enemy){
+                                    cout<<"Enemy power is:"<<enemy;
+                                    cout<<endl<<"********************You Win this round**************************"<<endl;
+                                    level=Gam.Game::getLevel()+1;
+                                    health=Gam.Game::getHealth();
+                                    superhealth=Gam.Game::getSuperhealth();
+                                    xp=Gam.Game::getXp()+15;
+                                    life=Gam.Game::getlife();
+                                    Game Gam(charname,level,health,superhealth,xp,life);
+                                    Gam.Game::output();
+                                             }
+                                else{
+                                    cout<<"Enemy power is:"<<enemy;
+                                    cout<<endl<<"********************You Loose this round**************************"<<endl;
+                                    level=Gam.Game::getLevel();
+                                    health=Gam.Game::getHealth()-1;
+                                    superhealth=Gam.Game::getSuperhealth();
+                                    if(Gam.Game::getXp()==0){
+                                        xp=Gam.Game::getXp();
+                                                         }
+                                    else{
+                                        xp=Gam.Game::getXp()-15;
+                                        }
+                                    if(Gam.Game::getlife()==0){
+                                        cout<<"You have lost all your chances";
+                                        fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                        return(0);
+                                                    }
+                                    else{
+                                        life=Gam.Game::getlife()-1;
+                                        }
+                                    Game Gam(charname,level,health,superhealth,xp,life);
+                                    Gam.Game::output();
+                                    }
+                                cout<<"Do you want to continue Game if yes enter 'Y' or 'y'"<<endl;
+                                cout<<"If you want to exit game enter 'e' or 'E'"<<endl;
+                                cin>>fer;
+                                if(fer=='e' || fer=='E'){
+                                    cout<<"Thankyou for playing. See you next time. Game Saved"<<endl;
+                                    fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                    return(0);
+                                                        }
+                                                            }
+                                 }
+                        if(cchoice==3){
+                            cout<<"Enter Weapon: ";
+                            getline(cin,n1);
+                            while(fer!='y' || fer!='Y'){
+                            cout<<"Enter Attack power between 1 and 100: ";
+                            cin>>n2;
+                            cout<<"Enter Powerup force between 1 and 100: ";
+                            cin>>n3;
+                            Spartan spa1(charname,1,100,0,0,3,n1,n2,n3);
+                            spa1.Spartan::output();
+                            enemy=enmy();
+                            if(n2>enemy){
+                                cout<<"Enemy power is:"<<enemy;
+                                cout<<endl<<"**********You Win this round*************"<<endl;
+                                level=Gam.Game::getLevel()+1;
+                                health=Gam.Game::getHealth();
+                                superhealth=Gam.Game::getSuperhealth();
+                                xp=Gam.Game::getXp()+15;
+                                life=Gam.Game::getlife();
+                                Game Gam(charname,level,health,superhealth,xp,life);
+                                Gam.Game::output();
+                                         }
+                            else{
+                                cout<<"Enemy power is:"<<enemy;
+                                cout<<endl<<"**********You Loose this round*************"<<endl;
+                                level=Gam.Game::getLevel();
+                                health=Gam.Game::getHealth()-1;
+                                superhealth=Gam.Game::getSuperhealth();
+                                if(Gam.Game::getXp()==0){
+                                    xp=Gam.Game::getXp();
+                                                    }
+                                else{
+                                    xp=Gam.Game::getXp()-15;
+                                    }
+                                if(Gam.Game::getlife()==0){
+                                    cout<<"You have lost all your chances";
+                                    fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                    return(0);
+                                                }
+                                else{
+                                    life=Gam.Game::getlife()-1;
+                                    }
+                                Game Gam(charname,level,health,superhealth,xp,life);
+                                Gam.Game::output();
+                                }
+                            cout<<"Do you want to continue Game if yes enter 'Y' or 'y'"<<endl;
+                            cout<<"If you want to exit game enter 'e' or 'E'"<<endl;
+                            cin>>fer;
+                            if(fer=='e' || fer=='E'){
+                                cout<<"Thankyou for playing:: See you next time:: Game Saved"<<endl;
+                                fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                return(0);
+                                                    }
+                                                        }
+                            }
+                                    }// switch charecter stop
+
+     if(choice==2)          ////////  Load saved File
+     {
+         cout<<"Please enter your name (The same name you used for your previous game)"<<endl;
+         getline(cin,yourname);
+         yourname=yourname+".txt";
+         fin.open(yourname);
+         if(fin.is_open()){
+             cout<<"File has succefully opened:: Loading Game::::::::::"<<endl;
+                            }
+         else{
+         cout<<"Please enter your name (The same name you used for your previous game)"<<endl;
+         getline(cin,yourname);
+         yourname=yourname+".txt";
+         fin.open(yourname);
+            if(!fin.is_open()){
+             cout<<"File cannot be opened exiting game"<<endl;
+             return(0);
+                                }
+            }
+         getline(fin,charname);
+         fin>>cchoice>>level>>health>>superhealth>>xp>>life;
+         fin.ignore();
+         Game Gam(charname,level,health,superhealth,xp,life);
+         Gam.Game::output();
+                 if(cchoice==1){
+
+                                        cout<<"Enter power: ";
+                                        getline(cin,n1);
+                                        while(fer!='y' || fer!='Y'){
+                                        cout<<"Enter Strike Force between 1 and 100: ";
+                                        cin>>n2;
+                                        cout<<"Enter Defense Force between 1 and 100: ";
+                                        cin>>n3;
+                                        Titan ta1(charname,level,health,superhealth,xp,life,n1,n2,n3);
+                                        ta1.Titan::output();
+                                        enemy=enmy();
+                                        if(n2>enemy){
+                                            cout<<"Enemy power is:"<<enemy;
+                                            cout<<endl<<"********************You Win this round**************************"<<endl;
+                                            level=Gam.Game::getLevel()+1;
+                                            health=Gam.Game::getHealth();
+                                            superhealth=Gam.Game::getSuperhealth();
+                                            xp=Gam.Game::getXp()+15;
+                                            life=Gam.Game::getlife();
+                                            Game Gam(charname,level,health,superhealth,xp,life);
+                                            Gam.Game::output();
+                                                    }
+                                        else{
+                                            cout<<"Enemy power is:"<<enemy;
+                                            cout<<endl<<"**********You Loose this round*************"<<endl;
+                                            level=Gam.Game::getLevel();
+                                            health=Gam.Game::getHealth()-1;
+                                            superhealth=Gam.Game::getSuperhealth();
+                                            if(Gam.Game::getXp()==0){
+                                                xp=Gam.Game::getXp();
+                                                                }
+                                            else{
+                                                xp=Gam.Game::getXp()-15;
+                                                }
+                                            if(Gam.Game::getlife()==0){
+                                                cout<<"You have lost all your chances";
+                                                cout<<"Thankyou for playing. See you next time."<<endl;
+                                                fout.open(yourname);
+                                                fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                                return(0);
+                                                            }
+                                            else{
+                                                life=Gam.Game::getlife()-1;
+                                                }
+                                            Game Gam(charname,level,health,superhealth,xp,life);
+                                            Gam.Game::output();
+                                            }
+                                        cout<<"Do you want to continue Game if yes enter 'Y' or 'y'"<<endl;
+                                        cout<<"If you want to exit game enter 'e' or 'E'"<<endl;
+                                        cin>>fer;
+                                        if(fer=='e' || fer=='E'){
+                                            cout<<"Thankyou for playing. See you next time."<<endl;
+                                            fout.open(yourname);
+                                            fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                            return(0);
+                                                                }
+
+                                        }}
+                                if(cchoice==2){
+                                        cout<<"Enter Spell: ";
+                                        getline(cin,n1);
+                                        while(fer!='y' || fer!='Y'){
+                                        cout<<"Enter Potion power between 1 and 100: ";
+                                        cin>>n2;
+                                        Witch wit1(charname,level,health,superhealth,xp,life,n1,n2);
+                                        wit1.Witch::output();
+                                        enemy=enmy();
+                                        if(n2>enemy){
+                                            cout<<"Enemy power is:"<<enemy;
+                                            cout<<endl<<"********************You Win this round**************************"<<endl;
+                                            level=Gam.Game::getLevel()+1;
+                                            health=Gam.Game::getHealth();
+                                            superhealth=Gam.Game::getSuperhealth();
+                                            xp=Gam.Game::getXp()+15;
+                                            life=Gam.Game::getlife();
+                                            Game Gam(charname,level,health,superhealth,xp,life);
+                                            Gam.Game::output();
+                                                     }
+                                        else{
+                                            cout<<"Enemy power is:"<<enemy;
+                                            cout<<endl<<"**********You Loose this round*************"<<endl;
+                                            level=Gam.Game::getLevel();
+                                            health=Gam.Game::getHealth()-1;
+                                            superhealth=Gam.Game::getSuperhealth();
+                                            if(Gam.Game::getXp()==0){
+                                                xp=Gam.Game::getXp();
+                                                                 }
+                                            else{
+                                                xp=Gam.Game::getXp()-15;
+                                                }
+                                            if(Gam.Game::getlife()==0){
+                                                cout<<"You have lost all your chances";
+                                                cout<<"Thankyou for playing. See you next time."<<endl;
+                                                fout.open(yourname);
+                                                fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                                return(0);
+                                                            }
+                                            else{
+                                                life=Gam.Game::getlife()-1;
+                                                }
+                                            Game Gam(charname,level,health,superhealth,xp,life);
+                                            Gam.Game::output();
+                                            }
+                                        cout<<"Do you want to continue Game if yes enter 'Y' or 'y'"<<endl;
+                                        cout<<"If you want to exit game enter 'e' or 'E'"<<endl;
+                                        cin>>fer;
+                                        if(fer=='e' || fer=='E'){
+                                            cout<<"Thankyou for playing. See you next time."<<endl;
+                                            fout.open(yourname);
+                                            fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                            return(0);
+                                                                }
+                                                                    }
+                                         }
+                                if(cchoice==3){
+                                    cout<<"Enter Weapon: ";
+                                    getline(cin,n1);
+                                    while(fer!='y' || fer!='Y'){
+                                    cout<<"Enter Attack power between 1 and 100: ";
+                                    cin>>n2;
+                                    cout<<"Enter Powerup force between 1 and 100: ";
+                                    cin>>n3;
+                                    Spartan spa1(charname,level,health,superhealth,xp,life,n1,n2,n3);
+                                    spa1.Spartan::output();
+                                    enemy=enmy();
+                                    if(n2>enemy){
+                                        cout<<"Enemy power is:"<<enemy;
+                                        cout<<endl<<"********************You Win this round**************************"<<endl;
+                                        level=Gam.Game::getLevel()+1;
+                                        health=Gam.Game::getHealth();
+                                        superhealth=Gam.Game::getSuperhealth();
+                                        xp=Gam.Game::getXp()+15;
+                                        life=Gam.Game::getlife();
+                                        Game Gam(charname,level,health,superhealth,xp,life);
+                                        Gam.Game::output();
+                                                 }
+                                    else{
+                                        cout<<"Enemy power is:"<<enemy;
+                                        cout<<endl<<"**********You Loose this round*************"<<endl;
+                                        level=Gam.Game::getLevel();
+                                        health=Gam.Game::getHealth()-1;
+                                        superhealth=Gam.Game::getSuperhealth();
+                                        if(Gam.Game::getXp()==0){
+                                            xp=Gam.Game::getXp();
+                                                            }
+                                        else{
+                                            xp=Gam.Game::getXp()-15;
+                                            }
+                                        if(Gam.Game::getlife()==0){
+                                            cout<<"You have lost all your chances";
+                                            cout<<"Thankyou for playing. See you next time."<<endl;
+                                            fout.open(yourname);
+                                            fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                            return(0);
+                                                        }
+                                        else{
+                                            life=Gam.Game::getlife()-1;
+                                            }
+                                        Game Gam(charname,level,health,superhealth,xp,life);
+                                        Gam.Game::output();
+                                        }
+                                    cout<<"Do you want to continue Game if yes enter 'Y' or 'y'"<<endl;
+                                    cout<<"If you want to exit game enter 'e' or 'E'"<<endl;
+                                    cin>>fer;
+                                    if(fer=='e' || fer=='E'){
+                                        cout<<"Thankyou for playing. See you next time."<<endl;
+                                        fout.open(yourname);
+                                        fout<<charname<<endl<<cchoice<<endl<<level<<endl<<health<<endl;
+                                                fout<<superhealth<<endl<<xp<<endl<<life;
+                                        return(0);
+                                                            }
+                                                                }
+                                    }
+                         }////// end of file switch
+
+    if(choice==3)
+    {
+        cout<<"Thankyou for playing the game, See you next time";
+        return(0);
+    }
+}
